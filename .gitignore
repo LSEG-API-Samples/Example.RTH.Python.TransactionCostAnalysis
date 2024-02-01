@@ -1,0 +1,7 @@
+.vscode
+data
+other
+tca_venv
+rth_config.json
+refinitiv-data.config.json
+.DS_Store

@@ -1,0 +1,29 @@
+{
+    "logs": {
+        "level": "debug",
+        "transports": {
+            "console": {
+                "enabled": false
+            },
+            "file": {
+                "enabled": false,
+                "name": "refinitiv-data-lib.log"
+            }
+        }
+    },
+    "sessions": {
+        "default": "platform.rdp",
+        "platform": {
+            "rdp": {
+                "app-key": "",
+                "username": "",
+                "password": ""
+            }
+        },
+        "desktop": {
+            "workspace": {
+                "app-key": ""
+            }
+        }
+    }
+}

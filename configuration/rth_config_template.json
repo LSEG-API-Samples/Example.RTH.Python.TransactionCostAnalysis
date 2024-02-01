@@ -1,0 +1,51 @@
+{
+    "creds": {
+        "username": "",
+        "password": ""
+    },
+    "paths": {
+        "file_Path": "./"
+    },
+    "rth_request_type": 
+    {
+        "tick_history": {
+            "data_type": "#DataScope.Select.Api.Extractions.ExtractionRequests.TickHistoryTimeAndSalesExtractionRequest",
+            "content_fields": [
+                "Trade - Exchange Time",
+                "Trade - Ask Price",
+                "Trade - Ask Size",
+                "Trade - Bid Price",
+                "Trade - Bid Size",
+                "Trade - Volume",
+                "Trade - Price",
+                "Trade - Low",
+                "Trade - High",
+                "Trade - Market VWAP"
+            ],
+            "conditions": {
+                "MessageTimeStampIn": "LocalExchangeTime",
+                "DateRangeTimeZone": "Local Exchange Time Zone",
+                "ReportDateRangeType": "Range"
+             }
+            
+        },
+        "market_depth": {            
+            "data_type": "#DataScope.Select.Api.Extractions.ExtractionRequests.TickHistoryMarketDepthExtractionRequest",
+            "content_fields": [
+                "Ask Price",
+                "Ask Size",
+                "Bid Price",
+                "Bid Size",
+                "Instrument ID",
+                "Exchange Time"
+              ],
+            "conditions": {
+                "View": "NormalizedLL2",
+                "NumberOfLevels": 10,
+                "MessageTimeStampIn": "LocalExchangeTime",
+                "DateRangeTimeZone": "Local Exchange Time Zone",
+                "ReportDateRangeType": "Range"
+             }
+        }
+    }
+}
