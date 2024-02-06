@@ -12,10 +12,10 @@ def plot_slippage_through_time(df):
     st.plotly_chart(fig_slippage_time)    
 
 def plot_against_trade_volume(df, metric):
-    st.write(f'{metric} versus executed_amount')
+    st.write(f'{metric} against executed amount')
     df['position_name'] = np.where(df['position']==1, 'buy', 'sell')
-    df  = df.groupby('order_id').agg({'executed_amount': 'sum', 'position_name': 'last', metric: 'last'})
-    fig_slippage_trade_vol =  px.scatter(df, x='executed_amount', y=metric, title=f'{metric} vs. executed_amount' , color='position_name')
+    # df  = df.groupby('order_id').agg({'executed_amount': 'sum', 'position_name': 'last', metric: 'last'})
+    fig_slippage_trade_vol =  px.scatter(df, x='executed_amount', y=metric , color='position_name')
     st.plotly_chart(fig_slippage_trade_vol)
 
 def plot_slippage_distribution(df):
@@ -72,7 +72,7 @@ def plot_slippage_by(df, metric):
 
     st.write(f'Average slippage by {metric}')
     df = df.dropna(subset = 'order_id')
-    # df = df.drop_duplicates(subset = 'order_id', keep = 'last')
+    df = df.drop_duplicates(subset = 'order_id', keep = 'last')
     df.sort_values(by = metric, inplace = True)
     grouped_df = df[[metric, 'market_spread', 'slippage']].groupby(by = metric).mean().reset_index()
     fig_slippage_venue = make_subplots(specs=[[{"secondary_y": True}]])
@@ -106,6 +106,7 @@ def plot_slippage_dist_by(df, metric):
     st.plotly_chart(fig_sippage_dist)
 
 def plot_trade_recap(df, order_id):
+    st.write(f'Trade recap')
     if order_id:
         signal_time = df.loc[df.order_id == order_id].signal_time.iloc[0]
         trades = df.loc[df['signal_time'] == signal_time]

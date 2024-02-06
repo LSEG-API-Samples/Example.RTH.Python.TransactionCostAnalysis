@@ -8,7 +8,7 @@ class DataExtraction:
     def __init__(self, file_path, config_file_path, token, request_type) -> None:
         self.file_path = file_path
         self.token = token
-        self.use_aws = False
+        # self.use_aws = False
         self.semaphore = asyncio.Semaphore(35)
         self.session = aiohttp.ClientSession()
         self.request_type = request_type
@@ -104,16 +104,16 @@ class DataExtraction:
         request_url = "https://selectapi.datascope.refinitiv.com/RestApi/v1/Extractions/RawExtractionResults" + \
             "('" + job_id + "')" + "/$value"
 
-        if self.use_aws:
-            request_headers = {
-                "Prefer": "respond-async",
-                "Content-Type": "text/plain",
-                "Accept-Encoding": "gzip",
-                "X-Direct-Download": "true",
-                "Authorization": "token " + token
-            }
-        else:
-            request_headers = {
+        # if self.use_aws:
+        #     request_headers = {
+        #         "Prefer": "respond-async",
+        #         "Content-Type": "text/plain",
+        #         "Accept-Encoding": "gzip",
+        #         "X-Direct-Download": "true",
+        #         "Authorization": "token " + token
+        #     }
+        # else:
+        request_headers = {
                 "Prefer": "respond-async",
                 "Content-Type": "text/plain",
                 "Accept-Encoding": "gzip",
@@ -121,13 +121,13 @@ class DataExtraction:
             }
 
         async with self.session.get(request_url, headers=request_headers) as response:
-            if self.use_aws:
-                print('Content response headers (AWS server): type: ' +
-                        response.headers["Content-Type"] + '\n')
-            else:
-                print('Content response headers (TRTH server): type: ' +
-                        response.headers["Content-Type"] + ' - encoding: ' + response.headers["Content-Encoding"] + '\n')
-            
+            # if self.use_aws:
+            #     print('Content response headers (AWS server): type: ' +
+            #             response.headers["Content-Type"] + '\n')
+            # else:
+            print('Content response headers (TRTH server): type: ' +
+                    response.headers["Content-Type"] + ' - encoding: ' + response.headers["Content-Encoding"] + '\n')
+        
             await self.write_output_to_gzip(response, ric, signal_time)
 
     async def write_output_to_gzip(self, response, ric, signal_time):

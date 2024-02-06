@@ -124,7 +124,7 @@ class StreamLitVisualisation:
                 plot_slippage_by(filtered_data, 'trader_id')
 
     def render_company_level_analysis(self,filtered_data):
-        st.title('Company Level analytics of the trades')
+        st.title('Company level trades analytics')
         buy, sell, all = st.tabs(["Buy", "Sell", "All Trades"])
 
         with buy:
