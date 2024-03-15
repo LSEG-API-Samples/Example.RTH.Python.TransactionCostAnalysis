@@ -1,19 +1,8 @@
 
-from abc import ABC, abstractmethod
+from tca_analysis.MetricBenchmarkBase import MetricBenchmarkBase
 import numpy as np
-
-class Benchmark(ABC):
-
-    @property
-    @abstractmethod
-    def name(self):
-        pass
  
-    @abstractmethod
-    def calculate(self, trades_before_arrival):
-        pass
- 
-class ArrivalPriceBenchmark(Benchmark):
+class ArrivalPriceBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -25,7 +14,7 @@ class ArrivalPriceBenchmark(Benchmark):
         except IndexError:
             return np.nan
  
-class HighBenchmark(Benchmark):
+class HighBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -37,7 +26,7 @@ class HighBenchmark(Benchmark):
         except IndexError:
             return np.nan
         
-class SpreadBenchmark(Benchmark):
+class SpreadBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -49,7 +38,7 @@ class SpreadBenchmark(Benchmark):
         except IndexError:
             return np.nan
 
-class MidBenchmark(Benchmark):
+class MidBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -61,7 +50,7 @@ class MidBenchmark(Benchmark):
         except IndexError:
             return np.nan
             
-class LowBenchmark(Benchmark):
+class LowBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -73,7 +62,7 @@ class LowBenchmark(Benchmark):
         except IndexError:
             return np.nan 
 
-class MarketVWAPBenchmark(Benchmark):
+class MarketVWAPBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -85,7 +74,7 @@ class MarketVWAPBenchmark(Benchmark):
             return np.nan
         
 
-class BestAskBenchmark(Benchmark):
+class BestAskBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -96,7 +85,7 @@ class BestAskBenchmark(Benchmark):
         except IndexError:
             return np.nan
         
-class BestBidBenchmark(Benchmark):
+class BestBidBenchmark(MetricBenchmarkBase):
 
     @property
     def name(self):

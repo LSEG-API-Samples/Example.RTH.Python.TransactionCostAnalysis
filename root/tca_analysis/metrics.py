@@ -1,20 +1,8 @@
      
-from abc import ABC, abstractmethod
 import numpy as np
+from tca_analysis.MetricBenchmarkBase import MetricBenchmarkBase
 
-class Metric(ABC):
-
-    @property
-    @abstractmethod
-    def name(self):
-        pass
- 
-    @abstractmethod
-    def calculate(self, trades_ric, trades_before_arrival, vwap, twap):
-        pass
- 
- 
-class VWAPMetric(Metric):
+class VWAPMetric(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -23,7 +11,7 @@ class VWAPMetric(Metric):
     def calculate(self, trades_ric):
         return (trades_ric.trade_volume*trades_ric.execution_price).cumsum() / trades_ric.trade_volume.cumsum()
  
-class TWAPMetric(Metric):
+class TWAPMetric(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -32,7 +20,7 @@ class TWAPMetric(Metric):
         return trades_ric.execution_price.cumsum()/trades_ric.order_id.notnull().cumsum()
  
  
-class SlippageMetric(Metric):
+class SlippageMetric(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -41,7 +29,7 @@ class SlippageMetric(Metric):
     def calculate(self, trades_ric):
         return ((trades_ric['trades_vwap'] - trades_ric['signal_price'])*trades_ric['position'])/trades_ric['trades_vwap']*10000
 
-class MarketImpactMetric(Metric):
+class MarketImpactMetric(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -50,7 +38,7 @@ class MarketImpactMetric(Metric):
     def calculate(self, trades_ric):
         return ((trades_ric['trades_vwap'] - trades_ric['market_mid'])*trades_ric['position'])/trades_ric['trades_vwap']*10000
 
-class BestPrice(Metric):
+class BestPrice(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -67,7 +55,7 @@ class BestPrice(Metric):
 
         return best_price
 
-class WorstPrice(Metric):
+class WorstPrice(MetricBenchmarkBase):
 
     @property
     def name(self):
@@ -84,7 +72,7 @@ class WorstPrice(Metric):
 
         return worst_price
     
-class SlippageMarketVWAP(Metric):
+class SlippageMarketVWAP(MetricBenchmarkBase):
 
     @property
     def name(self):

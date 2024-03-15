@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from streamlit import cache_data
-from helper.utilities import read_all_files_to_df
 from tca_analysis.benchmarks import *
 from tca_analysis.metrics import *
 from tca_analysis.analysis import TCAAnalysis
@@ -14,32 +13,21 @@ class StreamLitVisualisation:
         self.market_data_path = market_data_path
         self.BENCHMARKS = [ArrivalPriceBenchmark, HighBenchmark, LowBenchmark, MarketVWAPBenchmark, MidBenchmark, SpreadBenchmark, BestAskBenchmark, BestBidBenchmark]
         self.METRICS = [VWAPMetric, TWAPMetric, SlippageMetric, BestPrice, WorstPrice, SlippageMarketVWAP, MarketImpactMetric]
-        self.TCA = TCAAnalysis()
+        self.TCA = TCAAnalysis(market_data_path)
         self.uploaded_file = st.sidebar.file_uploader("Upload a csv file to start the analysis", type=['csv'])
 
     def perform_analysis(self):
         if self.uploaded_file:
             trades_df = pd.read_csv(self.uploaded_file)
-            enriched_df = self.enrich_data_with_market_trades(trades_df)
-            tca_result_df = self.tca_analysis(enriched_df, 100)
+            tca_result_df = self.tca_analysis(trades_df, 100)
             tca_result_df = self.add_datetime_components(tca_result_df)
             tca_result_df = self.add_latency_duration_components(tca_result_df)
             self.visualise_analysis(tca_result_df)
 
+
     @cache_data
-    def enrich_data_with_market_trades(_self,trades_df):
-        trades_df['trade_time'] = pd.to_datetime(
-            trades_df['trade_time'])
-        trades_df['signal_time'] = pd.to_datetime(
-            trades_df['signal_time'])
-        order_df = read_all_files_to_df(_self.market_data_path)
-        enriched_data = pd.concat([trades_df, order_df])
-        enriched_data.sort_values(by=[ 'RIC', 'trade_time'], inplace=True)
-        return enriched_data  
-    
-    @cache_data
-    def tca_analysis(_self, enriched_data, arrival_latency):
-        result = _self.TCA.run(enriched_data, arrival_latency, _self.BENCHMARKS, _self.METRICS)
+    def tca_analysis(_self, trades_df, arrival_latency):
+        result = _self.TCA.run(trades_df, arrival_latency, _self.BENCHMARKS, _self.METRICS)
         result.to_csv('../data/tca_results.csv')
         return result
 
@@ -140,11 +128,12 @@ class StreamLitVisualisation:
             with st.expander("Trade Analytics"):
                 col1, col2 = st.columns(2)
                 with col1:
+                    plot_prices(filtered_data_buy, 'buy')                   
+
+                with col2:
                     order_id = st.selectbox('order_id', filtered_data_buy.order_id.unique())
                     plot_trade_recap(filtered_data, order_id)
                     
-                with col2:
-                    plot_prices(filtered_data_buy, 'buy')                   
 
         with sell:
             col1, col2 = st.columns(2)

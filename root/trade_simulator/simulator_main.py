@@ -18,7 +18,7 @@ end = '2023-07-27T23:59:00'
 short_ma = 50
 long_ma = 200
 order_type = 'market' # market or limit
-amount_buy = 30000000
+amount_buy = 10000000
 file_path_depth = "data/market_depth/with_minute_signal"
 
 simulated_trades = {}
